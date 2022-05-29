@@ -7,14 +7,14 @@ const Customers = () => {
 
     const getAllCustomersInTheLast30Days = async () => {
         // Get all customers in the last 30 days
-        const getCustomers = await axios.get(config.baseURL + "customers?consumer_key=ck_d3c18c39d3d7c58764a22d1939e14fb95cf3a55f&consumer_secret=cs_3f984ad7cefe669180d1e643525c4dc21b817eb3&after=2022-05-01T00:00:00&before=2022-06-01T00:00:00");
+        const getCustomers = await axios.get(config.allCustomerInTheLast30Days);
         if(getCustomers.status === 200){
             setCustomersInTheLast30Days(getCustomers.data);
         }
     }
     return (
         <div className='container-fluid'>
-            <h1 className='container-fluid'>Customers</h1>
+            <h1>Customers</h1>
             <div>
                 {customersInTheLast30Days.length !== 0 && 
                 customersInTheLast30Days.map(customer => 
@@ -25,7 +25,7 @@ const Customers = () => {
                 )
                 }
             </div>
-            <button onClick={() => getAllCustomersInTheLast30Days()}>Get all customers in the last 30 days</button>
+            <button onClick={() => getAllCustomersInTheLast30Days()} className="btn btn-success">Get all customers in the last 30 days</button>
         </div> 
      );
 }
