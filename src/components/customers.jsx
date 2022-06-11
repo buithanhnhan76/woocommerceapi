@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const Customers = () => {
     const [customersInTheLast30Days, setCustomersInTheLast30Days] = useState([]);
-
+    
     const getAllCustomersInTheLast30Days = async () => {
         // Get all customers in the last 30 days
         const getCustomers = await axios.get(config.allCustomerInTheLast30Days);
@@ -18,9 +18,12 @@ const Customers = () => {
             <div>
                 {customersInTheLast30Days.length !== 0 && 
                 customersInTheLast30Days.map(customer => 
-                <div>
+                <div class="m-3">
                     <p>id: {customer.id}</p>
+                    <p>Tên người dùng: {customer.first_name + customer.last_name}</p>
+                    <p>email: {customer.email}</p>
                     <p>Ngày tạo: {customer.date_created.slice(0,10)}</p>
+                    <hr></hr>
                 </div>
                 )
                 }
