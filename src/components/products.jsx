@@ -49,10 +49,14 @@ const Products = () => {
         })
     }
 
-    const handleAutoDeleteProduct = async () => {
+    const handleAutoDeleteProducts = async () => {
+        if(allProducts.length === 0){
+            toast.success("Please get all products first !");
+            return;
+        }
         let listDeleteId = [];
         for(let i = 0; i < allProducts.length; i++){
-            if(allProducts[i].sale_price < 10){
+            if(allProducts[i].sale_price < 500000){
                 listDeleteId.push(allProducts[i].id);
             }
         }
@@ -65,6 +69,7 @@ const Products = () => {
             else{
                 toast("fail");
                 listDeleteId.splice(i,1);
+                i--;
             }
         }
         let newListProducts = allProducts.filter(product => !listDeleteId.includes(product.id));
@@ -95,29 +100,31 @@ const Products = () => {
                         forcePage={currentPage}
                         renderOnZeroPageCount={null}
                     />
-                    <button className='btn btn-success' onClick={() => handleAutoDeleteProduct()}>Auto Delete Product Less Than 500k</button>
                 </div>
             }
             <button className='btn btn-success mt-2' onClick={() => handleGetAllProducts()}>Get all Products</button>
-            <h2>Update Products</h2>
-            <form onSubmit={(e) => handleSubmit(e)}>
-            <label>
-                Id sản phẩm: 
-                <input type="text" required onChange={(e) => setUpdateId(e.target.value)} className="d-block"></input>
-            </label>
-            <br></br>
-            <label>
-                Giá cập nhật:
-                <input type="number" required onChange={(e) => setUpdatePrice(e.target.value)} className="d-block"></input>
-            </label>
-            <br></br>
-            <label>
-                Số lượng tồn kho: 
-                <input type="number" required onChange={(e) => setUpdateQuantities(e.target.value)} className="d-block"></input>
-            </label>
-            <br></br>
-            <button className='btn btn-success mb-5'>Cập nhật</button>
-            </form>
+            <div>
+                <h2>Update Products</h2>
+                <form onSubmit={(e) => handleSubmit(e)}>
+                <label>
+                    Id sản phẩm: 
+                    <input type="text" required onChange={(e) => setUpdateId(e.target.value)} className="d-block"></input>
+                </label>
+                <br></br>
+                <label>
+                    Giá cập nhật:
+                    <input type="number" required onChange={(e) => setUpdatePrice(e.target.value)} className="d-block"></input>
+                </label>
+                <br></br>
+                <label>
+                    Số lượng tồn kho: 
+                    <input type="number" required onChange={(e) => setUpdateQuantities(e.target.value)} className="d-block"></input>
+                </label>
+                <br></br>
+                <button className='btn btn-success mb-3'>Cập nhật</button>
+                </form>
+            </div>
+            <button className='btn btn-success' onClick={() => handleAutoDeleteProducts()}>Auto Delete Products Less Than 500k</button>
         </div>
      );
 }

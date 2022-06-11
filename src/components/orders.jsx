@@ -1,6 +1,7 @@
 import React,{useState} from 'react';
 import config from '../config/config';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const Orders = () => {
     const [ordersInTheLast7Days, setOrdersInTheLast7Days] = useState([]);
@@ -15,6 +16,31 @@ const Orders = () => {
     const handleGetAllOrders = async () => {
         const result = await config.getAllOrders();
         setAllOrders(result);
+    }
+
+    const deleteProductValueLessThan15k = async () => {
+        let listDeletedId = [];
+        if(allOrders.length === 0){
+            toast.success("Please get all the orders first !");
+            return;
+        }
+        for(let i = 0; i < allOrders.length; i++){
+            if(allOrders[i].total <= 15000){
+                listDeletedId.push(allOrders[i].id);
+            }
+        }
+        for(let i =0; i < listDeletedId.length; i++){
+            const result = await config.deleteOrder(listDeletedId[i]);
+            if(result.status === 200){
+                toast.success("Delete success");
+            }
+            else{
+                listDeletedId.splice(i,1);
+                i--;
+            }
+        }
+        const newListAllOrders = allOrders.filter(order => !listDeletedId.includes(order.id));
+        setAllOrders(newListAllOrders);
     }
 
     return (
@@ -49,6 +75,7 @@ const Orders = () => {
                 }
             </div>
             <button onClick={() => getAllOrdersInTheLast7Days()} className="btn btn-success mt-3">Get all orders in the last 7 days</button>
+            <button class="btn btn-success d-block mt-3" onClick={() => deleteProductValueLessThan15k()}>Delete orders value less than 15k</button>
         </div> 
      );
 }

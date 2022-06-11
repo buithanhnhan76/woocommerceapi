@@ -57,6 +57,12 @@ const deleteProduct = async (productId) => {
     return await axios.delete(deleteProductUrl);
 }
 
+const deleteOrder = async (orderId) => {
+    const deleteOrderUrl = baseURL + `orders/${orderId}?consumer_key=${consumer_key}&consumer_secret=${consumer_secret}`;
+    return await axios.delete(deleteOrderUrl);
+}
+
+
 export default {
     baseURL,
     consumer_key,
@@ -66,5 +72,6 @@ export default {
     updateProduct,
     getAllProducts,
     deleteProduct,
-    getAllOrders
+    getAllOrders,
+    deleteOrder,
 }
