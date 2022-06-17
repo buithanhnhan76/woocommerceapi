@@ -13,13 +13,7 @@ const allOrders = baseURL + `orders?consumer_key=${consumer_key}&consumer_secret
 const updateProduct = async (productId, updatePrice, updateQuantities) => {
     const updateData = {'regular_price': updatePrice, 'manage_stock': true, 'stock_quantity': updateQuantities};
     const updateProductUrl = baseURL + `products/${productId}?consumer_key=${consumer_key}&consumer_secret=${consumer_secret}`;
-    const result = await axios.put(updateProductUrl,updateData);
-    if( result.status === 200){
-        toast.success("Update Success");
-    }
-    else{
-        alert("Fail");
-    }
+    return await axios.put(updateProductUrl,updateData);
 }
 
 const getAllProducts = async () => {

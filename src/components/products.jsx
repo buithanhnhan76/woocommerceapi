@@ -10,11 +10,26 @@ const Products = () => {
 
     const [allProducts, setAllProducts] = useState([]);
     const [currentPage, setCurrentPage] = useState(0);
-    const [listDeleteId, setListDeleteId] = useState([]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        config.updateProduct(updateId,updatePrice,updateQuantities);
+        let result = await config.updateProduct(updateId,updatePrice,updateQuantities);
+        if(result.status === 200){
+            toast.success("Update success");
+            let newListProducts = [...allProducts];
+            for(let i = 0; i < newListProducts.length; i++){
+                // id in server is number
+                if(newListProducts[i].id == updateId){
+                    console.log("???")
+                    newListProducts[i].regular_price = updatePrice;
+                    newListProducts[i].stock_quantity = updateQuantities;
+                }
+            }
+            setAllProducts(newListProducts);
+        }
+        else{
+            toast.success("Update fail");
+        }
     }
 
     const handleGetAllProducts = async () => {
@@ -56,10 +71,10 @@ const Products = () => {
         }
         let listDeleteId = [];
         for(let i = 0; i < allProducts.length; i++){
-            if(allProducts[i].sale_price < 500000){
+            if(allProducts[i].sale_price < 5000){
                 listDeleteId.push(allProducts[i].id);
             }
-        }
+        
         
         for(let i = 0; i < listDeleteId.length; i++){
             const result = await config.deleteProduct(listDeleteId[i]);
@@ -75,6 +90,7 @@ const Products = () => {
         let newListProducts = allProducts.filter(product => !listDeleteId.includes(product.id));
         setAllProducts(newListProducts);
     }
+}
 
     return ( 
         <div className='container-fluid'>
@@ -112,7 +128,7 @@ const Products = () => {
                 </label>
                 <br></br>
                 <label>
-                    Giá cập nhật:
+                    Giá cập nhật (regular price):
                     <input type="number" required onChange={(e) => setUpdatePrice(e.target.value)} className="d-block"></input>
                 </label>
                 <br></br>
@@ -124,7 +140,7 @@ const Products = () => {
                 <button className='btn btn-success mb-3'>Cập nhật</button>
                 </form>
             </div>
-            <button className='btn btn-success' onClick={() => handleAutoDeleteProducts()}>Auto Delete Products Less Than 500k</button>
+            <button className='btn btn-success' onClick={() => handleAutoDeleteProducts()}>Auto Delete Products Which Price Less Than 5k (Sale Price)</button>
         </div>
      );
 }
